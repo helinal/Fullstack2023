@@ -17,9 +17,6 @@ const App = () => {
     ]
   }
 
-  //oliot taulukoon
-  //voit olettaa, että aina kolme alkiota taulukossa: ei tarvitse loopata läpi
-
   return (
     <>
       <Header course={course} />
