@@ -1,42 +1,41 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
+import personService from './services/persons'
 
-const App = (props) => {
+const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personService
+      .getAll()
+      .then(initialPersons => setPersons(initialPersons))
   }, [])
-  console.log('render', persons.length, 'notes')
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-      id: persons.length+1
-    }
-
-    //talteen pelkät henkilöiden nimet:
+    //otetaan talteen pelkät henkilöiden nimet:
     const personNames = persons.map(person => person.name)
 
+    //filtteröinti ja sen jälkeen palvelimen kanssa kommunikointi:
     if (personNames.includes(newName)) {
       alert(`${newName} is already added to the phonebook :(`)
     } else {
+      const personObject = {
+        name: newName, 
+        number: newNumber
+      }
       setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+
+      personService
+        .create(personObject)
+        .then(returnedPerson => 
+          setPersons(persons.concat(returnedPerson)))
+          setNewName('')
+          setNewNumber('')
     }
   }
 
