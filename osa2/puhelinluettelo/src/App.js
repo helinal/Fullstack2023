@@ -17,17 +17,23 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    //otetaan talteen pelkät henkilöiden nimet:
     const personNames = persons.map(person => person.name)
 
-    //filtteröinti ja sen jälkeen palvelimen kanssa kommunikointi:
     if (personNames.includes(newName)) {
-      alert(`${newName} is already added to the phonebook :(`)
+      window.confirm(`${newName} is already added to the phonebook, do you want to replace the old number with the new one?`)
+      const person = persons.find(person => person.name === newName)
+      const id = person.id
+      const personObject = {name: newName, number: newNumber}
+
+      personService
+        .update(id, personObject)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== id ? p : returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     } else {
-      const personObject = {
-        name: newName, 
-        number: newNumber
-      }
+      const personObject = {name: newName, number: newNumber}
       setPersons(persons.concat(personObject))
 
       personService
@@ -36,6 +42,16 @@ const App = () => {
           setPersons(persons.concat(returnedPerson)))
           setNewName('')
           setNewNumber('')
+    }
+  }
+
+  const maybeDeleteThis = (id) => {
+    if(window.confirm("Are you sure you want to delete this contact?")) {
+      personService
+        .deleteThis(id)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+        })
     }
   }
 
@@ -68,7 +84,7 @@ const App = () => {
       />
 
       <h2>Numbers:</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} maybeDeleteThis={maybeDeleteThis}/>
     </>
   )
 }
@@ -105,10 +121,14 @@ const PersonForm = (props) => {
 const Persons = (props) => {
   return (
     <ul>
-        {props.personsToShow.map(person => 
-          <Person key={person.id} person={person} />
-        )}
-      </ul>
+      {props.personsToShow.map(person => 
+        <Person 
+          key={person.id} 
+          person={person}
+          maybeDelete={() => props.maybeDeleteThis(person.id)} 
+        />
+      )}
+    </ul>
   )
 }
 
