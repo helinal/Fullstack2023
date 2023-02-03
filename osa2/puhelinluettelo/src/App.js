@@ -7,6 +7,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     personService
@@ -16,7 +18,6 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-
     const personNames = persons.map(person => person.name)
 
     if (personNames.includes(newName)) {
@@ -29,9 +30,20 @@ const App = () => {
         .update(id, personObject)
         .then(returnedPerson => {
           setPersons(persons.map(p => p.id !== id ? p : returnedPerson))
+          setMessage(`Updated the number`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          setError(`This contact has already been removed from the server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+
     } else {
       const personObject = {name: newName, number: newNumber}
       setPersons(persons.concat(personObject))
@@ -42,16 +54,24 @@ const App = () => {
           setPersons(persons.concat(returnedPerson)))
           setNewName('')
           setNewNumber('')
+        setMessage(`Added the new contact`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
     }
   }
 
   const maybeDeleteThis = (id) => {
-    if(window.confirm("Are you sure you want to delete this contact?")) {
+    if(window.confirm(`Are you sure you want to delete this contact?`)) {
       personService
         .deleteThis(id)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
         })
+      setMessage(`Deleted the contact`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -64,7 +84,6 @@ const App = () => {
   }
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setShowAll(event.target.value)
   }
 
@@ -75,6 +94,8 @@ const App = () => {
   return (
     <>
       <h1>The Phonebook</h1>
+      <Notification message={message} />
+      <Error message={error} />
       <Filter showAll={showAll} handleFilterChange={handleFilterChange}/>
 
       <h2>Add a new contact:</h2>
@@ -83,9 +104,27 @@ const App = () => {
       handleNumberChange={handleNumberChange}
       />
 
-      <h2>Numbers:</h2>
+      <h2>Contacts:</h2>
       <Persons personsToShow={personsToShow} maybeDeleteThis={maybeDeleteThis}/>
     </>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="message">{message}</div>
+  )
+}
+
+const Error = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="error">{message}</div>
   )
 }
 

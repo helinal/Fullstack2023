@@ -1,8 +1,10 @@
 const Person = ({person, maybeDelete}) => {
     return (
       <>
-        <li>{person.name} {person.number}</li>
-        <button onClick={maybeDelete}>delete</button>
+        <li className='person'>
+          {person.name} {person.number}
+          <button onClick={maybeDelete}>delete</button>
+        </li>
       </>
     )
   }
