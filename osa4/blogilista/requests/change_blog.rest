@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/63f354d950e8d1544637a944
+Content-type: application/json
+
+{
+  "title": "titteli",
+  "author": "authori",
+  "url": "urli",
+  "likes": 12
+}

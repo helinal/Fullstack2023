@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im11dW1pUCIsImlkIjoiNjNmMjcxMjI3YzJmY2Y1MmFmNzIzMDZmIiwiaWF0IjoxNjc2ODkxMzMxfQ.1sQBqhxVVCxGNZsyiLaGvHFE4LkIVlZmZMDr0_dV-5M
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1paSIsImlkIjoiNjNmMzY3NzliZDc2NThjYzYwNmM4MmFmIiwiaWF0IjoxNjc2ODk2MTU3LCJleHAiOjE2NzY4OTk3NTd9.0DAXUA4nlm4lba6R8vt-NclPJkDacbNUemfDh47EJlY
 
 {
-    "title": "uusi blog 4",
-    "author": "title 4",
-    "url": "url 4",
-    "likes": "104"
+    "title": "uusi blog 5",
+    "author": "title 5",
+    "url": "url 5",
+    "likes": "105"
 }

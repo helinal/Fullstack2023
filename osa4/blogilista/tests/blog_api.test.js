@@ -3,9 +3,6 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
-const bcrypt = require('bcrypt')
-
-const User = require('../models/user')
 const Blog = require('../models/blog')
 
 beforeEach(async () => {
