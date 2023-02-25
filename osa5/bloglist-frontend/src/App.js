@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import Notification from './components/Notification'
+//import Notification from './components/Notification'
 import Error from './components/Error'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -17,7 +19,6 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -63,26 +64,17 @@ const App = () => {
     }
   }
 
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
+  const handleNewBlog = async (blogObject) => {
     
     try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url
-      })
+      const newBlog = await blogService.create(
+        blogObject
+      )
 
       setBlogs (blogs.concat(newBlog))
 
       setMessage(`a new blog ${title} by ${author} added successfully`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      setTimeout(() => {setMessage(null)}, 5000)
 
     } catch (exception) {
       setError(`a blog must contain a title, an author and a url`)
@@ -122,41 +114,9 @@ const App = () => {
       
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
 
-      <h3>Create new</h3>
-
-      <Notification message={message} />
-      <Error error={error} />
-
-      <form onSubmit={handleNewBlog}>
-      <div>
-          title:
-          <input
-          type="title"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-          type="author"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-          type="url "
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create a new blog</button>
-      </form>
+      <Togglable buttonLabel='new blog'>
+        <BlogForm createBlog={handleNewBlog} />
+      </Togglable>
 
       <h3>All blogs</h3>
       {blogs.map(blog =>
@@ -164,6 +124,8 @@ const App = () => {
       )}
     </> 
   )
+
+//uuden blogin luomislomake toggable
 
   return (
     <>
