@@ -12,16 +12,15 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null)
 
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  
   const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
       setUser(user)
@@ -76,9 +75,9 @@ const App = () => {
       setTimeout(() => {setMessage(null)}, 5000)
 
     } catch (exception) {
-      setError(`a blog must contain a title, an author and a url`)
+      setError('a blog must contain a title, an author and a url')
       setTimeout(() => {setError(null)}, 5000)
-    }   
+    }
   }
 
   const handleNewLike = async (blogObject) => {
@@ -116,7 +115,7 @@ const App = () => {
       <Error error={error} />
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -125,7 +124,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -133,13 +132,13 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const blogForm = () => (
     <>
       <h1>Blogs</h1>
-      
+
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
 
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -153,18 +152,18 @@ const App = () => {
       {blogs
         .sort((i, y) => y.likes - i.likes)
         .map(blog =>
-        <Blog key={blog.id} blog={blog} 
-        handleNewLike={handleNewLike}
-        removeBlog={removeBlog}/>
-      )}
-    </> 
+          <Blog key={blog.id} blog={blog}
+            handleNewLike={handleNewLike}
+            removeBlog={removeBlog}/>
+        )}
+    </>
   )
 
   return (
     <>
       {!user && loginForm()}
       {user && blogForm()
-    } 
+      }
     </>
   )
 }

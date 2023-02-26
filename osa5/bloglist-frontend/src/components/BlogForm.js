@@ -6,10 +6,10 @@ const BlogForm = ({ createBlog }) => {
     createBlog: PropTypes.func.isRequired
   }
 
-  const [title, setTitle] = useState('') 
-  const [author, setAuthor] = useState('') 
-  const [url, setUrl] = useState('') 
-  
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
   const addBlog = (event) => {
     event.preventDefault()
 
@@ -28,34 +28,34 @@ const BlogForm = ({ createBlog }) => {
   return (
     <>
       <h3>Create new</h3>
-        <form onSubmit={addBlog}>
-          <div>
+      <form onSubmit={addBlog}>
+        <div>
             title:
-            <input
-              type="title"
-              value={title}
-              name="Title"
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </div>
-          <div>
+          <input
+            type="title"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
             author:
-            <input
-              type="author"
-              value={author}
-              name="Author"
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
+          <input
+            type="author"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
             url:
-            <input
-              type="url "
-              value={url}
-              name="Url"
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </div>
+          <input
+            type="url "
+            value={url}
+            name="Url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
         <button type="submit">create</button>
       </form>
     </>
