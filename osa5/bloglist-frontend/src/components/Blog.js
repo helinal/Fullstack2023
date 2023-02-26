@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
+import Remove from './Remove'
 
-const Blog = ({blog , handleNewLike}) => {
+const Blog = ({blog , handleNewLike, removeBlog}) => {
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
     handleNewLike: PropTypes.func.isRequired
@@ -36,6 +37,7 @@ const Blog = ({blog , handleNewLike}) => {
           <br/>
           {blog.user.name}
           <br/>
+          <Remove blog={blog} removeBlog={removeBlog}/>
         </div>
       </div>
     )} else {
