@@ -6,7 +6,7 @@ const Remove = ({ blog, removeBlog }) => {
 
   if (currentUser === blogUser) {
     return(
-      <button onClick={() => {removeBlog(blog)}}> remove </button>
+      <button onClick={() => {removeBlog(blog)}}>remove</button>
     )
   } else {
     return null
