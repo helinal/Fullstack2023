@@ -17,11 +17,15 @@ import {
     useParams,
   } from 'react-router-dom'
 
+import { Alert } from 'react-bootstrap'
+import { MDBBtn } from 'mdb-react-ui-kit';
+
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [user, setUser] = useState('')
     const [info, setInfo] = useState({ message: null })
     const [users, setUsers] = useState([])
+    const [message, setMessage] = useState(null)
 
     const blogFormRef = useRef()
 
@@ -54,7 +58,10 @@ const App = () => {
             const user = await loginService.login({ username, password })
             setUser(user)
             storageService.saveUser(user)
-            notifyWith('welcome!')
+            setMessage(`welcome ${user.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 10000)
         } catch (e) {
             notifyWith('wrong username or password', 'error')
         }
@@ -98,7 +105,7 @@ const App = () => {
     if (!user) {
         return (
             <div>
-                <h2>log in to application</h2>
+                <h2>Log in to the application</h2>
                 <Notification info={info} />
                 <LoginForm login={login} />
             </div>
@@ -149,9 +156,10 @@ const App = () => {
     const HomePage = () => {
         return (
           <div>
-            <Togglable buttonLabel="create new" ref={blogFormRef}>
+            <Togglable buttonLabel="create new" ref={blogFormRef} >
               <NewBlog createBlog={createBlog} />
             </Togglable>
+            &nbsp;
             <div>
               {blogs.sort(byLikes).map((blog) => (
                 <Blog key={blog.id} blog={blog} />
@@ -210,23 +218,40 @@ const App = () => {
     }
     
     const Header = () => {
+      const style = {
+        marginBottom: 2,
+        padding: 5,
+        backgroundColor: 'lightgray'
+      }
+
         return (
           <>
-            <div>
+            <div style={style}>
               <Link to="/">blogs</Link> &nbsp;
               <Link to="/users">users</Link> &nbsp;
               {user.name} logged in &nbsp;
-              <button onClick={logout}>logout</button>
+              <MDBBtn onClick={logout}>logout</MDBBtn>
             </div>
 
-            <h2>blog app</h2>
+            <h2 style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>Blog app</h2> 
             <Notification info={info} />
           </>
         )
     }
     
     return (
-        <>
+      <div className="container">
+      {(message &&
+        <Alert variant="success">
+          {message}
+        </Alert>
+      )}
+
+        <div className="container">
           <Router>
             <Header />
             <Routes>
@@ -236,7 +261,8 @@ const App = () => {
               <Route path="/blogs/:id" element={<BlogView />} />
             </Routes>
           </Router>
-        </>
+        </div>
+      </div>
       )
     }
 
